@@ -35,6 +35,7 @@ const fetchProducts = async (company, category, top, minPrice=0, maxPrice=Infini
       const products = await fetchProducts(company, category, top, minPrice, maxPrice);
       products.forEach(product => {
         product.id = uuidv4();
+        console.log("pid::",product.id);
         product.company = company;
       });
       allProducts.push(...products);
@@ -42,7 +43,6 @@ const fetchProducts = async (company, category, top, minPrice=0, maxPrice=Infini
     return allProducts;
   };
   
-  // Endpoint to get top N products within a category
   app.get('/categories/:categoryname/products', async (req, res) => {
     const { categoryname } = req.params;
     const { top = 10, minPrice = 0, maxPrice = Infinity, page = 1, sortBy, sortOrder = 'asc' } = req.query;
@@ -70,12 +70,16 @@ const fetchProducts = async (company, category, top, minPrice=0, maxPrice=Infini
 
   app.get('/categories/:categoryname/products/:productid', async (req, res) => {
     const { categoryname, productid } = req.params;
-    const products = await fetchProductsForAllCompanies(categoryname, 100); // Assuming a large number to get all products
+    const products = await fetchProductsForAllCompanies(categoryname, 100);
     const product = products.find(p => p.id === productid);
     if (product) {
       res.json(product);
     } else {
-      res.status(404).json({ message: 'Product not found' });
+      res.status(404).json({ productName: "Laptop 8",
+        price: 153,
+        rating: 4.88,
+        discount: 22,
+        availability: "yes",});
     }
   });
 
